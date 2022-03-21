@@ -1,29 +1,36 @@
 const express = require('express');
 const router = express.Router();
+const authorController = require("../controllers/authorController")
+const blogController = require("../controllers/blogController")
+const middleware = require("../controllers/middleware");
+//const publisherController = require("../controllers/publisherController")
 
-const authorController = require('../controllers/AuthorController');
-const blogController = require('../controllers/blogController')
-const middleware = require('../controllers/middleware')
 
+//Project 1
+router.post("/createAuthors", authorController.createAuthors)
+router.post("/loginAuthor", authorController.loginAuthor)
 
-// Author routes
+// PHASE 1
+// router.post("/createBlog", blogController.Blogs);
+// router.post("/createAuthor", authorController.createAuthors)
+// router.get("/getBlogs", blogController.getBlogdata)
+// router.put("/updateBlogs/:blogId", blogController.updateBlogs)
+// router.delete("/deleteBlogs/:blogId", blogController.deleteBlogs)
+// router.delete("/deleteBlogs", blogController.deleteBlogByQuery)
 
-router.post('/createauthors', authorController.CreateAuthor);
+// PHASE 2
+// AUTHENTICATION
+// router.post("/createBlog", middleware.authenticate, blogController.Blogs);
+// // router.post("/createAuthor", authorController.createAuthors)
+// router.get("/getBlogs", middleware.authenticate, blogController.getBlogdata)
+// router.put("/updateBlogs/:blogId", middleware.authenticate, blogController.updateBlogs)
+// router.delete("/deleteBlogs/:blogId", middleware.authenticate, blogController.deleteBlogs)
+// router.delete("/deleteBlogs", middleware.authenticate, blogController.deleteBlogByQuery)
+// router.post("/loginAuthor", middleware.authenticate, authorController.loginAuthor)
 
-router.post('/CreateBlog', blogController.CreateBlog);
-router.post('/Authorlogin', authorController.LoginAuthor);
-
-// Blog routes
-
-// router.post('/createblogs', middleware, blogController.CreateBlog);
-
-router.get('/getblogs', middleware, blogController.GetBlogList);
-
-router.put('/updateblogs/:blogId', middleware, blogController.UpdateBlogs);
-
-router.delete('/deleteblogsbyid/:blogId', middleware, blogController.DeleteBlogById);
-
-router.delete('/deleteblogbyquery', middleware, blogController.deleteBlogByQuery);
-
+// // AUTHORISATION
+router.put("/updateBlogs/:blogId", middleware.authenticate, middleware.authorisation, blogController.updateBlogs)
+router.delete("/deleteBlogs/:blogId", middleware.authenticate, middleware.authorisation, blogController.deleteBlogs)
+router.delete("/deleteBlogs", middleware.authenticate, middleware.authorisation, blogController.deleteBlogByQuery)
 
 module.exports = router;
